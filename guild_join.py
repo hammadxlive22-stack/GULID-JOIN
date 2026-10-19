@@ -54,6 +54,7 @@ except ImportError:
 # ═══════════════════════════════════════════════════════════════
 ACCOUNTS_FILE = "accounts.json"
 FORCED_REGION = "IND"
+HARDCODED_GUILD_ID = 3040938361
 
 # Guild retry
 GUILD_JOIN_RETRIES = 5
@@ -575,27 +576,6 @@ def load_accounts() -> List[dict]:
         return []
 
 
-async def ask_guild_id() -> Optional[int]:
-    log("=" * 60, Colors.CYAN)
-    while True:
-        try:
-            raw = await asyncio.to_thread(input, "[?] Enter GUILD ID (Enter = exit): ")
-        except (EOFError, KeyboardInterrupt):
-            return None
-        raw = (raw or "").strip()
-        if not raw:
-            return None
-        try:
-            gid = int(raw)
-            if gid > 0:
-                log_ok(f"[GUILD] Guild ID: {gid}")
-                log("=" * 60, Colors.CYAN)
-                return gid
-        except ValueError:
-            pass
-        log_err("[GUILD] Invalid guild ID (must be positive integer)")
-
-
 async def run_all(guild_id: int, accounts: List[dict]):
     """Login + guild join for every account in parallel, results summary."""
     tasks = []
@@ -643,10 +623,9 @@ async def main():
     log("  Guest UID + Password → Login → Join Guild", Colors.WHITE)
     log("=" * 60, Colors.CYAN)
 
-    guild_id = await ask_guild_id()
-    if not guild_id:
-        log_warn("[GUILD] No guild ID — exiting")
-        return
+    guild_id = HARDCODED_GUILD_ID
+    log_ok(f"[GUILD] Using Target Guild ID: {guild_id}")
+    log("=" * 60, Colors.CYAN)
 
     accounts = load_accounts()
     if not accounts:
