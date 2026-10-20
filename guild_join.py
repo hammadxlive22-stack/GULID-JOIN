@@ -54,7 +54,7 @@ except ImportError:
 # ═══════════════════════════════════════════════════════════════
 ACCOUNTS_FILE = "accounts.json"
 FORCED_REGION = "IND"
-HARDCODED_GUILD_ID = 3040938361
+DEFAULT_GUILD_ID = 3055682494  # Hardcoded Guild ID
 
 # Guild retry
 GUILD_JOIN_RETRIES = 5
@@ -404,7 +404,6 @@ async def send_majorlogin(data, release_version, server_url):
         if len(c) < 40:
             log_err(f"MajorLogin response too short ({len(c)}B)")
             return None
-        # Multi-offset parse
         for off in [0, 64] + list(range(128)):
             try:
                 m = thunderFF_pb2.MajorLoginRes()
@@ -623,8 +622,8 @@ async def main():
     log("  Guest UID + Password → Login → Join Guild", Colors.WHITE)
     log("=" * 60, Colors.CYAN)
 
-    guild_id = HARDCODED_GUILD_ID
-    log_ok(f"[GUILD] Using Target Guild ID: {guild_id}")
+    guild_id = DEFAULT_GUILD_ID
+    log_ok(f"[GUILD] Using Hardcoded Guild ID: {guild_id}")
     log("=" * 60, Colors.CYAN)
 
     accounts = load_accounts()
